@@ -1,74 +1,86 @@
-"use client"
+'use client';
 
-import React from "react"
-import { FolderOpen, Grid, Library, LayoutDashboard } from "lucide-react"
-import Link from "next/link"
+import React from 'react'
+import { User } from "lucide-react";
+import UserItem from "./UserItem";
+import { Command, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+interface MenuItem {
+  link: string;
+  icon?: React.ReactNode;
+  text: string;
+}
+
+interface MenuGroup {
+  group: string;
+  items: MenuItem[];
+}
 
 export default function CustomSidebar() {
+  const menuList: MenuGroup[] = [
+    {
+      group: "General",
+      items: [
+        {
+          link: "/",
+          icon: <User />,
+          text: "Profile"
+        },
+        {
+          link: "/",
+          text: "Inbox"
+        },
+        {
+          link: "/",
+          text: "Billing"
+        },
+        {
+          link: "/",
+          text: "Notifications"
+        },
+      ]
+    },
+    {
+      group: "Settings",
+      items: [
+        {
+          link: "/",
+          text: "General Settings"
+        },
+        {
+          link: "/",
+          text: "Privacy"
+        },
+        {
+          link: "/",
+          text: "Logs"
+        }
+      ]
+    }
+  ];
+
   return (
-    <div className="w-64 bg-gray-100 flex flex-col h-full">
-      <div className="p-4 border-b">
-        <div className="flex items-center space-x-4">
-          <Avatar>
-            <AvatarImage src="/placeholder.svg?height=40&width=40" alt="User avatar" />
-            <AvatarFallback>U</AvatarFallback>
-          </Avatar>
-          <div>
-            <p className="text-sm font-medium">John Doe</p>
-            <p className="text-xs text-gray-500">john@example.com</p>
-          </div>
-        </div>
+    <div className="flex flex-col gap-2 w-[300px] border-r min-h-screen p-4">
+      <div>
+        <UserItem />
       </div>
-      <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-        <Button variant="ghost" className="w-full justify-start" asChild>
-          <Link href="/test">
-            <FolderOpen className="mr-2 h-4 w-4" />
-            Test Page
-          </Link>
-        </Button>
-        <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="manage">
-            <AccordionTrigger className="hover:no-underline">
-              <Button variant="ghost" className="w-full justify-start">
-                <Grid className="mr-2 h-4 w-4" />
-                Manage
-              </Button>
-            </AccordionTrigger>
-            <AccordionContent>
-              <div className="pl-6 space-y-2">
-                <Button variant="ghost" className="w-full justify-start text-sm">Test1</Button>
-                <Button variant="ghost" className="w-full justify-start text-sm">Test2</Button>
-                <Button variant="ghost" className="w-full justify-start text-sm">Test3</Button>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-        <Button variant="ghost" className="w-full justify-start">
-          <Library className="mr-2 h-4 w-4" />
-          Library
-        </Button>
-        <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="overview">
-            <AccordionTrigger className="hover:no-underline">
-              <Button variant="ghost" className="w-full justify-start">
-                <LayoutDashboard className="mr-2 h-4 w-4" />
-                Overview
-              </Button>
-            </AccordionTrigger>
-            <AccordionContent>
-              <div className="pl-6 space-y-2">
-                <Button variant="ghost" className="w-full justify-start text-sm">Test1</Button>
-                <Button variant="ghost" className="w-full justify-start text-sm">Test2</Button>
-                <Button variant="ghost" className="w-full justify-start text-sm">Test3</Button>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </nav>
+      <div className="grow">
+        <Command>
+          <CommandList>
+            {menuList.map((menu, key) => (
+              <CommandGroup key={key} heading={menu.group}>
+                {menu.items.map((option, optionKey) => (
+                  <CommandItem key={optionKey}>
+                    {option.icon}
+                    {option.text}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            ))}
+          </CommandList>
+        </Command>
+      </div>
+      <div>Settings / Notifications</div>
     </div>
-  )
+  );
 }
